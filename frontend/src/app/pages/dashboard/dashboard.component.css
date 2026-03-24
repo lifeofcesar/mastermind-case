@@ -1,0 +1,16 @@
+.dashboard-container { max-width: 900px; margin: 0 auto; padding: 2rem; font-family: sans-serif; }
+.dashboard-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 1rem; margin-bottom: 2rem; }
+h1 { color: #333; margin: 0; }
+.btn-logout { background-color: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
+.action-card { background: #f8f9fa; padding: 2rem; border-radius: 8px; text-align: center; margin-bottom: 2rem; border: 1px solid #e9ecef; }
+.btn-primary { background-color: #007bff; color: white; border: none; padding: 1rem 2rem; font-size: 1.1rem; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
+.btn-primary:hover { background-color: #0056b3; }
+.history-section h3 { color: #444; margin-bottom: 1rem; }
+.history-table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.history-table th, .history-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
+.history-table th { background-color: #f4f4f4; font-weight: bold; }
+.status-badge { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.85rem; font-weight: bold; color: white; }
+.status-badge.won { background-color: #28a745; }
+.status-badge.lost { background-color: #dc3545; }
+.status-badge.in_progress { background-color: #ffc107; color: #333; }
+.empty-state { text-align: center; padding: 2rem; color: #666; background: #f9f9f9; border-radius: 4px; }

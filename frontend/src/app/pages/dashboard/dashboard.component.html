@@ -1,0 +1,46 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <h1>Mastermind - Dashboard</h1>
+    <button class="btn-logout" (click)="logout()">Sair</button>
+  </header>
+
+  <main class="dashboard-content">
+    <div class="action-card">
+      <h2>Pronto para jogar?</h2>
+      <p>Teste sua lógica adivinhando a combinação secreta de 4 cores/letras.</p>
+      <button class="btn-primary" (click)="startNewGame()">Iniciar Nova Partida</button>
+    </div>
+
+    <div class="history-section">
+      <h3>Seu Histórico de Partidas</h3>
+      
+      <div *ngIf="isLoading" class="loading">Carregando histórico...</div>
+      <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+      <div *ngIf="!isLoading && history.length === 0" class="empty-state">
+        Você ainda não jogou nenhuma partida.
+      </div>
+
+      <table *ngIf="!isLoading && history.length > 0" class="history-table">
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Status</th>
+            <th>Pontuação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let match of history">
+            <td>{{ match.date | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="match.status.toLowerCase()">
+                {{ match.status === 'WON' ? 'Vitória' : (match.status === 'LOST' ? 'Derrota' : 'Em Andamento') }}
+              </span>
+            </td>
+            <td>{{ match.score }} pts</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
