@@ -131,18 +131,37 @@ ng serve
 
 ## 🗄️ Configurações do Banco de Dados
 
-As credenciais abaixo são usadas tanto no `docker-compose.yml` quanto no `application.properties` do backend:
+As configurações do backend ficam no arquivo `application.yml`, que já está alinhado com as credenciais do `docker-compose.yml`:
 
 ```yaml
-POSTGRES_USER: mastermind_user
-POSTGRES_PASSWORD: mastermind_password
-POSTGRES_DB: mastermind_db
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/mastermind_db
+    username: mastermind_user
+    password: mastermind_password
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+logging:
+  level:
+    org.springframework.security: TRACE
+    com.mastermind: DEBUG
+
+server:
+  port: 8080
 ```
 
-Se precisar ajustar as configurações do banco no backend, edite o arquivo:
+Se precisar ajustar alguma configuração, edite o arquivo:
 
 ```
-backend/src/main/resources/application.properties
+backend/src/main/resources/application.yml
 ```
 
 ---
