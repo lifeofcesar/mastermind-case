@@ -8,6 +8,7 @@
 ## 📋 Índice
 
 - [Sobre o Projeto](#-sobre-o-projeto)
+- [Como o Jogo Funciona](#-como-o-jogo-funciona)
 - [Stack Tecnológica](#-stack-tecnológica)
 - [Estrutura do Repositório](#-estrutura-do-repositório)
 - [Pré-requisitos](#-pré-requisitos)
@@ -17,17 +18,44 @@
   - [3. Executar o Backend](#3-executar-o-backend)
   - [4. Executar o Frontend](#4-executar-o-frontend)
 - [Configurações do Banco de Dados](#️-configurações-do-banco-de-dados)
+- [Documentação da API (Swagger)](#-documentação-da-api-swagger)
+- [Rodando os Testes Unitários](#-rodando-os-testes-unitários)
 - [Acessando a Aplicação](#-acessando-a-aplicação)
 
 ---
 
 ## 📖 Sobre o Projeto
 
-O **Mastermind** é um jogo clássico de lógica e dedução. O objetivo é descobrir uma sequência secreta de cores (ou números) dentro de um número limitado de tentativas, recebendo dicas a cada palpite sobre quantos elementos estão corretos na posição certa e quantos estão corretos mas fora de posição.
+O **Mastermind Web Game** é uma versão web do clássico jogo de lógica e dedução **Mastermind**, desenvolvido como case técnico para o processo seletivo do **Itaú Unibanco**.
 
-Este projeto implementa o jogo em formato web, com uma API RESTful no backend e uma interface interativa no frontend.
+A solução é composta por uma **API RESTful** em Java/Spring Boot e uma **interface web** em Angular, com autenticação de usuários, persistência de partidas e ranking de jogadores.
 
 ---
+
+## 🧠 Como o Jogo Funciona
+
+O Mastermind é um jogo de lógica em que o objetivo é descobrir uma **combinação secreta de cores** gerada pelo sistema, dentro de um número limitado de tentativas.
+
+**Fluxo de uma partida:**
+
+1. O jogador faz login e inicia uma nova partida.
+2. O backend gera uma combinação secreta (nunca exposta ao frontend) e cria um registro único da partida.
+3. O jogador monta sua tentativa escolhendo uma sequência de cores/valores no tabuleiro e a submete.
+4. O backend valida a tentativa e retorna apenas **quantas posições estão corretas** — sem revelar quais são.
+5. O jogador usa esse feedback para refinar as próximas tentativas.
+6. A partida termina quando o jogador acerta a combinação ou esgota as **10 tentativas** disponíveis.
+7. O resultado é salvo com pontuação, tempo de duração e histórico completo de tentativas.
+
+**Telas da aplicação:**
+
+| Tela | Descrição |
+|------|-----------|
+| Login | Autenticação com e-mail/usuário e senha |
+| Dashboard | Menu principal para iniciar partida ou ver ranking |
+| Jogo | Tabuleiro interativo com matriz de tentativas e feedback visual |
+| Ranking | Classificação dos jogadores ordenada por desempenho |
+
+
 
 ## 🛠 Stack Tecnológica
 
@@ -166,13 +194,50 @@ backend/src/main/resources/application.yml
 
 ---
 
+## 📚 Documentação da API (Swagger)
+
+A API possui documentação interativa gerada automaticamente pelo **Springdoc OpenAPI**, cumprindo o requisito de documentação mínima da API.
+
+Com o backend em execução, acesse a URL abaixo no seu navegador para explorar e testar todos os endpoints de forma visual:
+
+🔗 **[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)**
+
+Lá você encontrará todos os endpoints disponíveis, como `/auth/login`, `/matches/start`, entre outros, com descrição de parâmetros e exemplos de resposta.
+
+---
+
+## 🧪 Rodando os Testes Unitários
+
+O projeto conta com suítes de testes para garantir a integridade da aplicação, conforme exigido nos requisitos não funcionais.
+
+### Backend (Regras de Negócio)
+
+Testa a lógica central do Mastermind — validação de cores, cálculo de acertos e controle de tentativas — utilizando **JUnit 5** e **Mockito**:
+
+```bash
+cd backend
+mvn test
+```
+
+### Frontend (Componentes Visuais)
+
+Testa a renderização e o comportamento dos componentes Angular:
+
+```bash
+cd frontend
+ng test
+```
+
+---
+
 ## 🌐 Acessando a Aplicação
 
-| Serviço    | URL                          |
-|------------|------------------------------|
-| Frontend   | http://localhost:4200        |
-| Backend (API) | http://localhost:8080     |
-| PostgreSQL | localhost:5432               |
+| Serviço           | URL                                              |
+|-------------------|--------------------------------------------------|
+| Frontend          | http://localhost:4200                            |
+| Backend (API)     | http://localhost:8080                            |
+| Swagger UI        | http://localhost:8080/swagger-ui/index.html      |
+| PostgreSQL        | localhost:5432                                   |
 
 ---
 
