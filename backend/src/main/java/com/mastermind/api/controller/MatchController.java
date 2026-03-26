@@ -42,8 +42,6 @@ public class MatchController {
         matchService.surrenderMatch(id, user);
         return ResponseEntity.ok(Map.of("message", "Partida encerrada"));
     }
-
-    // NOVO ENDPOINT QUE FALTAVA PARA O HISTÓRICO!
     @GetMapping("/history")
     public ResponseEntity<List<MatchHistoryDTO>> getHistory(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(matchService.getUserHistory(user));

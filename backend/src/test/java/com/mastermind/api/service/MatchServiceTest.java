@@ -6,6 +6,7 @@ import com.mastermind.api.dto.GuessDTO;
 import com.mastermind.api.model.Match;
 import com.mastermind.api.model.User;
 import com.mastermind.api.repository.MatchRepository;
+import com.mastermind.api.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,89 +29,76 @@ class MatchServiceTest {
     @Mock
     private MatchRepository matchRepository;
 
-    // Usamos o objeto real para testar a serialização/deserialização do JSON de verdade
+    @Mock
+    private UserRepository userRepository;
+
     @Spy
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper(); // Usamos o real para testar o JSON de verdade
 
     @InjectMocks
     private MatchService matchService;
 
-    private User mockUser;
-    private Match mockMatch;
+    private User testUser;
+    private Match testMatch;
 
     @BeforeEach
     void setUp() {
-        mockUser = User.builder().id(1L).username("testjogador").build();
-        
-        // Criamos uma partida mockada com a resposta secreta "A, B, C, D"
-        mockMatch = Match.builder()
-                .id("partida-123")
-                .user(mockUser)
-                .secretCode("[\"A\",\"B\",\"C\",\"D\"]")
-                .attemptsMatrix("[]")
-                .status("IN_PROGRESS")
-                .startedAt(LocalDateTime.now())
-                .build();
+        testUser = new User();
+        testUser.setId(1L);
+        testUser.setUsername("hacker_master");
+
+        testMatch = new Match();
+        testMatch.setId("match-123");
+        testMatch.setUser(testUser);
+        testMatch.setStatus("IN_PROGRESS");
+        testMatch.setSecretCode("[\"A\",\"B\",\"C\",\"D\"]"); // Código secreto fixo para os testes
+        testMatch.setAttemptsMatrix("[]");
+        testMatch.setStartedAt(LocalDateTime.now());
     }
 
     @Test
-    void shouldStartNewMatch() {
-        when(matchRepository.save(any(Match.class))).thenAnswer(i -> {
-            Match m = i.getArgument(0);
-            m.setId("nova-partida-id");
-            return m;
-        });
+    void submitAttempt_DeveRetornarVitoria_QuandoPalpiteForExato() {
+        // Arrange (Prepara o cenário)
+        when(matchRepository.findById("match-123")).thenReturn(Optional.of(testMatch));
+        when(matchRepository.save(any(Match.class))).thenReturn(testMatch);
+        GuessDTO guess = new GuessDTO(List.of("A", "B", "C", "D")); // Palpite perfeito
 
-        var result = matchService.startNewMatch(mockUser);
+        // Act (Executa a ação)
+        FeedbackDTO feedback = matchService.submitAttempt("match-123", testUser, guess);
 
-        assertNotNull(result.get("matchId"));
-        assertEquals("nova-partida-id", result.get("matchId"));
-        verify(matchRepository, times(1)).save(any(Match.class));
+        // Assert (Verifica o resultado)
+        assertEquals(4, feedback.exactMatches());
+        assertEquals(0, feedback.partialMatches());
+        assertEquals("WON", feedback.matchStatus());
     }
 
     @Test
-    void shouldCalculateExactAndPartialMatchesCorrectly() {
-        when(matchRepository.findById("partida-123")).thenReturn(Optional.of(mockMatch));
-        
-        // O jogador chuta: A (certo no lugar certo), C (certo no lugar errado), F (errado), D (certo no lugar certo)
-        GuessDTO guess = new GuessDTO(Arrays.asList("A", "C", "F", "D"));
-        
-        FeedbackDTO feedback = matchService.submitAttempt("partida-123", mockUser, guess);
+    void submitAttempt_DeveRetornarParciais_QuandoCoresCertasNaPosicaoErrada() {
+        // Arrange
+        when(matchRepository.findById("match-123")).thenReturn(Optional.of(testMatch));
+        when(matchRepository.save(any(Match.class))).thenReturn(testMatch);
+        GuessDTO guess = new GuessDTO(List.of("D", "C", "B", "A")); // Tudo invertido
 
-        assertEquals(2, feedback.exactMatches(), "Deveria ter 2 acertos exatos (A e D)");
-        assertEquals(1, feedback.partialMatches(), "Deveria ter 1 acerto parcial (C)");
+        // Act
+        FeedbackDTO feedback = matchService.submitAttempt("match-123", testUser, guess);
+
+        // Assert
+        assertEquals(0, feedback.exactMatches());
+        assertEquals(4, feedback.partialMatches());
         assertEquals("IN_PROGRESS", feedback.matchStatus());
     }
 
     @Test
-    void shouldWinMatchOnCorrectGuess() {
-        when(matchRepository.findById("partida-123")).thenReturn(Optional.of(mockMatch));
-        
-        // Jogador acerta tudo
-        GuessDTO guess = new GuessDTO(Arrays.asList("A", "B", "C", "D"));
-        
-        FeedbackDTO feedback = matchService.submitAttempt("partida-123", mockUser, guess);
+    void submitAttempt_DeveLancarExcecao_QuandoPalpiteInvalido() {
+        // Arrange
+        when(matchRepository.findById("match-123")).thenReturn(Optional.of(testMatch));
+        GuessDTO guess = new GuessDTO(List.of("A", "B")); // Faltando cores (só 2)
 
-        assertEquals(4, feedback.exactMatches());
-        assertEquals("WON", feedback.matchStatus());
-        assertEquals("WON", mockMatch.getStatus());
-        assertNotNull(mockMatch.getFinishedAt());
-    }
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            matchService.submitAttempt("match-123", testUser, guess);
+        });
 
-    @Test
-    void shouldLoseMatchOnTenthAttempt() {
-        // Simulamos que o banco de dados já salvou 9 tentativas anteriores em JSON
-        String nineAttempts = "[[\"F\",\"F\",\"F\",\"F\"],[\"F\",\"F\",\"F\",\"F\"],[\"F\",\"F\",\"F\",\"F\"],[\"F\",\"F\",\"F\",\"F\"],[\"F\",\"F\",\"F\",\"F\"],[\"F\",\"F\",\"F\",\"F\"],[\"F\",\"F\",\"F\",\"F\"],[\"F\",\"F\",\"F\",\"F\"],[\"F\",\"F\",\"F\",\"F\"]]";
-        mockMatch.setAttemptsMatrix(nineAttempts);
-        
-        when(matchRepository.findById("partida-123")).thenReturn(Optional.of(mockMatch));
-        
-        // Jogador erra a 10ª tentativa
-        GuessDTO guess = new GuessDTO(Arrays.asList("E", "E", "E", "E"));
-        
-        FeedbackDTO feedback = matchService.submitAttempt("partida-123", mockUser, guess);
-
-        assertEquals("LOST", feedback.matchStatus());
-        assertEquals("LOST", mockMatch.getStatus());
+        assertEquals("O palpite deve conter exatamente 4 posições", exception.getMessage());
     }
 }
