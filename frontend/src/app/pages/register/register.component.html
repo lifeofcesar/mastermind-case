@@ -1,1 +1,54 @@
-<p>register works!</p>
+<div class="register-fixed-wrapper">
+  <div class="register-card-container">
+    
+    <div class="register-header">
+      <h2>Criar Conta</h2>
+      <p>Junte-se ao Mastermind e prove sua lógica.</p>
+    </div>
+
+    <div class="alert-box error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+    
+    <div class="alert-box success" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      
+      <div class="input-group">
+        <label for="username">Nome de Usuário</label>
+        <input id="username" type="text" formControlName="username" placeholder="Escolha um apelido" />
+        <span class="validation-error" *ngIf="registerForm.get('username')?.invalid && registerForm.get('username')?.touched">
+          Mínimo de 3 caracteres.
+        </span>
+      </div>
+
+      <div class="input-group">
+        <label for="email">E-mail</label>
+        <input id="email" type="email" formControlName="email" placeholder="seu@email.com" />
+        <span class="validation-error" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          Insira um e-mail válido.
+        </span>
+      </div>
+
+      <div class="input-group">
+        <label for="password">Senha</label>
+        <input id="password" type="password" formControlName="password" placeholder="Mínimo 6 caracteres" />
+        <span class="validation-error" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          A senha deve ter pelo menos 6 caracteres.
+        </span>
+      </div>
+
+      <button type="submit" class="btn-register-action" [disabled]="isLoading || successMessage !== ''">
+        {{ isLoading ? 'Processando...' : 'Confirmar Cadastro' }}
+      </button>
+      
+    </form>
+
+    <div class="register-footer">
+      Já tem uma conta? <a routerLink="/login">Faça Login aqui</a>
+    </div>
+    
+  </div>
+</div>

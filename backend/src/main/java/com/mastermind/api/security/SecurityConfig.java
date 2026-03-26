@@ -31,7 +31,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // HABILITA O CORS AQUI
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // SEU CORS IMPECÁVEL AQUI
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
@@ -43,17 +43,17 @@ public class SecurityConfig {
                 .build();
     }
 
-    // CONFIGURAÇÃO DAS REGRAS DO CORS
+    // A SUA CONFIGURAÇÃO ORIGINAL DE CORS:
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200")); // Libera o nosso Angular
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Libera os verbos HTTP, incluindo o OPTIONS do preflight
-        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type")); // Libera os cabeçalhos que usamos
-        configuration.setAllowCredentials(true); // Permite envio de credenciais/tokens
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration); // Aplica a regra para todos os endpoints
+        source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 

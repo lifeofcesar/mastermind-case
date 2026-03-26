@@ -44,4 +44,18 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!this.getToken();
   }
+
+  // LÊ O NOME DO USUÁRIO DENTRO DO TOKEN JWT
+  getUsername(): string {
+    const token = this.getToken();
+    if (!token) return 'Jogador';
+    try {
+      // O Payload do JWT é a segunda parte (separada por ponto) codificada em Base64
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      // O Spring Security guarda o login no "sub" (subject)
+      return payload.username || payload.sub || 'Jogador';
+    } catch (e) {
+      return 'Jogador';
+    }
+  }
 }

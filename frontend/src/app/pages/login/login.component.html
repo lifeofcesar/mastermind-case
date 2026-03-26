@@ -1,37 +1,42 @@
-<div class="auth-container">
-  <div class="auth-card">
-    <h2>Mastermind</h2>
-    <p>Faça login para jogar</p>
+<div class="auth-fixed-wrapper">
+  <div class="auth-card-container">
+    
+    <div class="auth-header">
+      <h2>Mastermind</h2>
+      <p>Faça login para jogar</p>
+    </div>
 
-    <div class="error-banner" *ngIf="errorMessage">
+    <div class="alert-box error" *ngIf="errorMessage">
       {{ errorMessage }}
     </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       
-      <div class="form-group">
+      <div class="input-group">
         <label for="login">E-mail ou Usuário</label>
         <input id="login" type="text" formControlName="login" placeholder="Digite seu e-mail ou usuário" />
-        <span class="error-text" *ngIf="loginForm.get('login')?.invalid && loginForm.get('login')?.touched">
+        <span class="validation-error" *ngIf="loginForm.get('login')?.invalid && loginForm.get('login')?.touched">
           Campo obrigatório.
         </span>
       </div>
 
-      <div class="form-group">
+      <div class="input-group">
         <label for="password">Senha</label>
         <input id="password" type="password" formControlName="password" placeholder="Digite sua senha" />
-        <span class="error-text" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        <span class="validation-error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
           A senha deve ter pelo menos 6 caracteres.
         </span>
       </div>
 
-      <button type="submit" [disabled]="isLoading">
+      <button type="submit" class="btn-auth-action" [disabled]="isLoading">
         {{ isLoading ? 'Entrando...' : 'Entrar' }}
       </button>
+      
     </form>
 
     <div class="auth-footer">
       Não tem uma conta? <a routerLink="/register">Cadastre-se</a>
     </div>
+    
   </div>
 </div>

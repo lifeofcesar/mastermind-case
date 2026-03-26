@@ -1,0 +1,93 @@
+<div class="game-wrapper">
+  <div class="game-container">
+    
+    <div class="game-header">
+      <div class="brand">
+        <h2>Mastermind</h2>
+      </div>
+      <div style="display: flex; gap: 0.5rem;">
+        <button class="btn-ghost" style="color: #ef4444; border-color: #fca5a5;" 
+                *ngIf="matchStatus === 'IN_PROGRESS'" (click)="surrender()">
+          Desistir
+        </button>
+        <button class="btn-ghost" (click)="goToDashboard()">Voltar ao Painel</button>
+      </div>
+    </div>
+
+    <div class="hud-panel">
+      <div class="hud-item">
+        <span class="hud-icon">⏱️</span>
+        <div class="hud-data">
+          <small>Tempo</small>
+          <strong>{{ formatTime(secondsElapsed) }}</strong>
+        </div>
+      </div>
+      <div class="hud-item hud-center">
+        <span class="hud-icon">🎯</span>
+        <div class="hud-data">
+          <small>Tentativa</small>
+          <strong>{{ attemptsHistory.length < 10 ? attemptsHistory.length + 1 : 10 }} / 10</strong>
+        </div>
+      </div>
+      <div class="hud-item">
+        <span class="hud-icon">🏆</span>
+        <div class="hud-data">
+          <small>Pontos</small>
+          <strong>{{ currentScore }}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="error-banner" *ngIf="errorMessage">{{ errorMessage }}</div>
+
+    <div class="board">
+      
+      <div class="history-list">
+        <div class="history-row" *ngFor="let attempt of attemptsHistory; let i = index">
+          <div class="row-number">{{ i + 1 }}</div>
+          <div class="guess-pegs">
+            <div class="peg color-{{color}}" *ngFor="let color of attempt.guess">{{ color }}</div>
+          </div>
+          <div class="feedback-pegs">
+            <span class="feedback-badge exact">🟢 {{ attempt.feedback.exactMatches }} exatos</span>
+            <span class="feedback-badge partial">⚪ {{ attempt.feedback.partialMatches }} parciais</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="current-guess-area" *ngIf="matchStatus === 'IN_PROGRESS'">
+        <div class="guess-slots">
+          <div class="guess-slot" *ngFor="let slot of [0, 1, 2, 3]">
+            <div class="selected-peg color-{{currentGuess[slot]}}" *ngIf="currentGuess[slot]">{{ currentGuess[slot] }}</div>
+            <div class="empty-peg" *ngIf="!currentGuess[slot]">?</div>
+            <div class="color-picker">
+              <button class="picker-btn color-{{color}}" *ngFor="let color of availableColors" 
+                      (click)="selectColor(slot, color)">{{ color }}</button>
+            </div>
+          </div>
+        </div>
+        
+        <button class="btn-primary w-full" [disabled]="!isGuessComplete() || isSubmitting" (click)="submitGuess()">Confirmar Palpite</button>
+      </div>
+
+      <div class="end-game-card" *ngIf="matchStatus === 'WON'">
+        <h3 class="won-title">Vitória! 🥳</h3>
+        <p>Você hackeou o código e marcou <strong>{{ currentScore }} pts</strong>!</p>
+        <div class="action-buttons">
+          <button class="btn-secondary" (click)="goToDashboard()">Painel</button>
+          <button class="btn-primary" (click)="playAgain()">Jogar Novamente</button>
+        </div>
+      </div>
+
+      <div class="end-game-card" *ngIf="matchStatus === 'LOST'">
+        <h3 class="lost-title">Game Over 💀</h3>
+        <p>A partida foi encerrada. Mais sorte na próxima!</p>
+        <div class="action-buttons">
+          <button class="btn-secondary" (click)="goToDashboard()">Painel</button>
+          <button class="btn-primary" (click)="playAgain()">Tentar Novamente</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

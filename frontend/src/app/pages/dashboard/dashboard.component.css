@@ -1,16 +1,58 @@
-.dashboard-container { max-width: 900px; margin: 0 auto; padding: 2rem; font-family: sans-serif; }
-.dashboard-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 1rem; margin-bottom: 2rem; }
-h1 { color: #333; margin: 0; }
-.btn-logout { background-color: #dc3545; color: white; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
-.action-card { background: #f8f9fa; padding: 2rem; border-radius: 8px; text-align: center; margin-bottom: 2rem; border: 1px solid #e9ecef; }
-.btn-primary { background-color: #007bff; color: white; border: none; padding: 1rem 2rem; font-size: 1.1rem; border-radius: 4px; cursor: pointer; transition: background 0.2s; }
-.btn-primary:hover { background-color: #0056b3; }
-.history-section h3 { color: #444; margin-bottom: 1rem; }
-.history-table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-.history-table th, .history-table td { padding: 1rem; text-align: left; border-bottom: 1px solid #eee; }
-.history-table th { background-color: #f4f4f4; font-weight: bold; }
-.status-badge { padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.85rem; font-weight: bold; color: white; }
-.status-badge.won { background-color: #28a745; }
-.status-badge.lost { background-color: #dc3545; }
-.status-badge.in_progress { background-color: #ffc107; color: #333; }
-.empty-state { text-align: center; padding: 2rem; color: #666; background: #f9f9f9; border-radius: 4px; }
+:root {
+  --bg-color: #f8fafc; --surface: #ffffff;
+  --text-main: #0f172a; --text-muted: #64748b;
+  --border: #e2e8f0; --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-wrapper { min-height: 100vh; background-color: var(--bg-color); padding: 2rem 1rem; font-family: ui-sans-serif, system-ui, sans-serif; color: var(--text-main); }
+.dashboard-container { max-width: 900px; margin: 0 auto; }
+
+.dashboard-header { display: flex; justify-content: space-between; align-items: center; background: var(--surface); padding: 1.5rem 2rem; border-radius: 1rem; box-shadow: var(--shadow); margin-bottom: 2rem; border: 1px solid var(--border); }
+.user-profile { display: flex; align-items: center; gap: 1rem; }
+.avatar { font-size: 2.5rem; background: #f1f5f9; padding: 0.5rem; border-radius: 50%; border: 2px solid var(--border); }
+h1 { margin: 0; font-size: 1.5rem; font-weight: 800; }
+.text-muted { color: var(--text-muted); margin: 0; }
+.font-bold { font-weight: 700; }
+
+.btn-logout { background: #fee2e2; color: #ef4444; border: none; padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+.btn-logout:hover { background: #fca5a5; color: white; }
+
+.action-card { padding: 3rem 2rem; border-radius: 1rem; text-align: center; margin-bottom: 2rem; color: white; box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3); }
+.hero-gradient { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
+.action-card h2 { margin: 0 0 0.5rem 0; font-size: 2rem; font-weight: 800; }
+.action-card p { margin-bottom: 2rem; opacity: 0.9; font-size: 1.1rem; }
+
+.btn-group { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+.btn-game { display: flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; font-size: 1.1rem; font-weight: 700; border: none; border-radius: 0.5rem; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+.btn-game:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2); }
+.btn-game.classic { background: white; color: #1e40af; }
+
+.history-section h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 1rem; color: var(--text-main); }
+.table-container { background: var(--surface); border-radius: 1rem; box-shadow: var(--shadow); overflow: hidden; border: 1px solid var(--border); }
+.history-table { width: 100%; border-collapse: collapse; text-align: left; }
+.history-table th { background: #f8fafc; padding: 1rem 1.5rem; font-weight: 700; color: var(--text-muted); border-bottom: 1px solid var(--border); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.05em; }
+.history-table td { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.history-table tr:hover { background: #f8fafc; }
+
+.status-badge { padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+.status-badge.won { background-color: #dcfce7; color: #166534; }
+.status-badge.lost { background-color: #fee2e2; color: #991b1b; }
+.status-badge.in_progress { background-color: #fef3c7; color: #92400e; }
+
+.score-text { color: #3b82f6; font-weight: 800; }
+.empty-state { text-align: center; padding: 3rem; background: var(--surface); border-radius: 1rem; color: var(--text-muted); font-weight: 600; border: 2px dashed var(--border); }
+
+.active-match-alert { display: flex; justify-content: space-between; align-items: center; background: #fffbeb; border: 1px solid #fcd34d; padding: 1.5rem; border-radius: 1rem; margin-bottom: 2rem; box-shadow: var(--shadow); }
+.active-match-alert h3 { color: #b45309; margin: 0 0 0.25rem 0; font-weight: 800; }
+.active-match-alert p { color: #92400e; margin: 0; font-size: 0.9rem; }
+.btn-resume { background: #f59e0b; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+.btn-resume:hover { background: #d97706; }
+
+/* ESTILOS DA PAGINAÇÃO */
+.pagination-controls { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: #f8fafc; border-top: 1px solid var(--border); }
+.btn-page { background: white; border: 1px solid var(--border); color: var(--text-main); font-weight: 600; padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s; }
+.btn-page:hover:not(:disabled) { background: #e2e8f0; }
+.btn-page:disabled { opacity: 0.4; cursor: not-allowed; }
+.page-info { font-size: 0.875rem; font-weight: 600; color: var(--text-muted); }
+.btn-ghost { background: white; color: #0f172a; border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: 0.5rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-decoration: none;}
+.btn-ghost:hover { background: #f1f5f9; }

@@ -2,13 +2,14 @@ package com.mastermind.api.controller;
 
 import com.mastermind.api.dto.FeedbackDTO;
 import com.mastermind.api.dto.GuessDTO;
+import com.mastermind.api.dto.MatchHistoryDTO;
 import com.mastermind.api.model.User;
 import com.mastermind.api.service.MatchService;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -23,17 +24,28 @@ public class MatchController {
 
     @PostMapping("/start")
     public ResponseEntity<Map<String, String>> startMatch(@AuthenticationPrincipal User user) {
-        Map<String, String> response = matchService.startNewMatch(user);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(matchService.startNewMatch(user));
     }
 
-    @PostMapping("/{matchId}/guess")
-    public ResponseEntity<FeedbackDTO> submitGuess(
-            @PathVariable String matchId,
-            @RequestBody @Valid GuessDTO guessDTO,
-            @AuthenticationPrincipal User user) {
-        
-        FeedbackDTO feedback = matchService.submitAttempt(matchId, user, guessDTO);
-        return ResponseEntity.ok(feedback);
+    @PostMapping("/{id}/guess")
+    public ResponseEntity<FeedbackDTO> submitGuess(@PathVariable String id, @RequestBody GuessDTO guessDTO, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(matchService.submitAttempt(id, user, guessDTO));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> getMatchState(@PathVariable String id, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(matchService.getMatchState(id, user));
+    }
+
+    @PostMapping("/{id}/surrender")
+    public ResponseEntity<Map<String, String>> surrenderMatch(@PathVariable String id, @AuthenticationPrincipal User user) {
+        matchService.surrenderMatch(id, user);
+        return ResponseEntity.ok(Map.of("message", "Partida encerrada"));
+    }
+
+    // NOVO ENDPOINT QUE FALTAVA PARA O HISTÓRICO!
+    @GetMapping("/history")
+    public ResponseEntity<List<MatchHistoryDTO>> getHistory(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(matchService.getUserHistory(user));
     }
 }

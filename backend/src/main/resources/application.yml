@@ -13,6 +13,13 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+       
+        logging:
+  level:
+    org.springframework.security: TRACE
+    com.mastermind: DEBUG
 
 server:
   port: 8080
+
+  

@@ -1,46 +1,81 @@
-<div class="dashboard-container">
-  <header class="dashboard-header">
-    <h1>Mastermind - Dashboard</h1>
-    <button class="btn-logout" (click)="logout()">Sair</button>
-  </header>
+<div class="dashboard-wrapper">
+  <div class="dashboard-container">
+    
+    <header class="dashboard-header">
+      <div class="user-profile">
+        <div class="avatar">👨‍💻</div>
+        <div>
+          <h1 class="text-2xl font-bold">Painel de Comando</h1>
+          <p class="text-sm text-muted">Bem-vindo de volta, {{ username }}.</p>
+        </div>
+      </div>
+      <div style="display: flex; gap: 1rem;">
+        <button class="btn-ghost" routerLink="/ranking">🏆 Ranking</button>
+        <button class="btn-logout" (click)="logout()">Sair</button>
+      </div>
+    </header>
 
-  <main class="dashboard-content">
-    <div class="action-card">
-      <h2>Pronto para jogar?</h2>
-      <p>Teste sua lógica adivinhando a combinação secreta de 4 cores/letras.</p>
-      <button class="btn-primary" (click)="startNewGame()">Iniciar Nova Partida</button>
-    </div>
-
-    <div class="history-section">
-      <h3>Seu Histórico de Partidas</h3>
+    <main class="dashboard-content">
       
-      <div *ngIf="isLoading" class="loading">Carregando histórico...</div>
-      <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-
-      <div *ngIf="!isLoading && history.length === 0" class="empty-state">
-        Você ainda não jogou nenhuma partida.
+      <div class="active-match-alert" *ngIf="activeMatch">
+        <div class="alert-content">
+          <h3>⚠️ Você tem uma partida em andamento!</h3>
+          <p>O cronômetro está pausado. Volte para tentar quebrar o código.</p>
+        </div>
+        <button class="btn-resume" (click)="resumeMatch()">Retomar Partida</button>
       </div>
 
-      <table *ngIf="!isLoading && history.length > 0" class="history-table">
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Status</th>
-            <th>Pontuação</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let match of history">
-            <td>{{ match.date | date:'dd/MM/yyyy HH:mm' }}</td>
-            <td>
-              <span class="status-badge" [ngClass]="match.status.toLowerCase()">
-                {{ match.status === 'WON' ? 'Vitória' : (match.status === 'LOST' ? 'Derrota' : 'Em Andamento') }}
-              </span>
-            </td>
-            <td>{{ match.score }} pts</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </main>
+      <div class="action-card hero-gradient">
+        <h2>Pronto para hackear?</h2>
+        <p>Inicie uma nova partida agora mesmo e tente desvendar o código secreto.</p>
+        <div class="btn-group">
+          <button class="btn-game classic" (click)="startNewGame()">
+            <span class="icon">🎮</span> Jogar Agora
+          </button>
+        </div>
+      </div>
+
+      <div class="history-section">
+        <h3>Seu Histórico Recente</h3>
+        <div *ngIf="isLoading" class="loading">Carregando dados criptografados...</div>
+        <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+        <div *ngIf="!isLoading && history.length === 0" class="empty-state">Nenhum log encontrado. Inicie uma partida!</div>
+
+        <div class="table-container" *ngIf="!isLoading && history.length > 0">
+          <table class="history-table">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Status</th>
+                <th>Tempo</th>
+                <th>Tentativas</th>
+                <th>Pontuação</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let match of paginatedHistory">
+                <td class="text-muted font-medium">{{ match.date | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>
+                  <span class="status-badge" [ngClass]="match.status.toLowerCase()">
+                    {{ match.status === 'WON' ? 'Vitória' : (match.status === 'LOST' ? 'Derrota' : 'Em Andamento') }}
+                  </span>
+                </td>
+                <td class="font-bold">⏱️ {{ formatDuration(match.durationInSeconds) }}</td>
+                <td>{{ match.attempts }} / 10</td>
+                <td class="score-text">{{ match.score }} pts</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="pagination-controls" *ngIf="totalPages > 1">
+            <button class="btn-page" (click)="prevPage()" [disabled]="currentPage === 1">Anterior</button>
+            <span class="page-info">Página {{ currentPage }} de {{ totalPages }}</span>
+            <button class="btn-page" (click)="nextPage()" [disabled]="currentPage === totalPages">Próximo</button>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
 </div>

@@ -34,11 +34,10 @@ export class LoginComponent {
       
       this.authService.login(this.loginForm.value).subscribe({
         next: () => {
-          this.router.navigate(['/dashboard']); // Redirecionamento exigido no case
+          this.router.navigate(['/dashboard']);
         },
         error: (err) => {
           this.isLoading = false;
-          // Feedback amigável conforme requisito
           this.errorMessage = err.error?.message || 'Credenciais inválidas. Tente novamente.';
         }
       });

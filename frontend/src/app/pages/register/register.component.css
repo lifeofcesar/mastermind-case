@@ -1,0 +1,96 @@
+/* FORÇA O CONTAINER A FICAR NO CENTRO EXATO DA TELA */
+.register-fixed-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8fafc;
+  font-family: 'Arial', sans-serif;
+  z-index: 1000;
+}
+
+/* O CARD BRANCO DO FORMULÁRIO */
+.register-card-container {
+  background-color: #ffffff;
+  padding: 2.5rem 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+  border: 1px solid #e2e8f0;
+  box-sizing: border-box;
+}
+
+.register-header { text-align: center; margin-bottom: 2rem; }
+.register-header h2 { margin: 0; font-size: 1.8rem; font-weight: 800; color: #0f172a; }
+.register-header p { margin: 0.5rem 0 0; color: #64748b; font-size: 0.95rem; }
+
+.input-group { margin-bottom: 1.25rem; }
+.input-group label { display: block; margin-bottom: 0.5rem; color: #0f172a; font-weight: 700; font-size: 0.9rem; }
+
+/* INBOX BEM DEFINIDO */
+.input-group input { 
+  width: 100%; 
+  padding: 0.8rem 1rem; 
+  border: 2px solid #94a3b8; 
+  border-radius: 0.5rem; 
+  font-size: 1rem; 
+  outline: none; 
+  box-sizing: border-box; 
+  background-color: #f8fafc; 
+  color: #0f172a;
+  transition: all 0.2s ease-in-out;
+}
+.input-group input:focus { 
+  border-color: #3b82f6; 
+  background-color: #ffffff; 
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2); 
+}
+
+/*==========================================================*/
+/* BLINDAGEM DO BOTÃO - IMPOSSÍVEL FICAR INVISÍVEL AGORA    */
+/*==========================================================*/
+.btn-register-action { 
+  width: 100% !important; 
+  background-color: #3b82f6 !important; /* Azul Forte */
+  color: #ffffff !important; /* Texto Branco */
+  border: 2px solid #2563eb !important; 
+  padding: 1rem !important; 
+  border-radius: 0.5rem !important; 
+  font-size: 1.1rem !important; 
+  font-weight: bold !important; 
+  cursor: pointer !important; 
+  margin-top: 1rem !important; 
+  display: block !important; 
+  visibility: visible !important; 
+  opacity: 1 !important;
+  box-sizing: border-box !important;
+  text-align: center !important;
+  transition: background-color 0.2s !important;
+}
+
+.btn-register-action:hover:not(:disabled) { 
+  background-color: #1d4ed8 !important; 
+}
+
+.btn-register-action:disabled { 
+  background-color: #94a3b8 !important; 
+  border-color: #94a3b8 !important;
+  color: #f8fafc !important;
+  cursor: not-allowed !important; 
+}
+/*==========================================================*/
+
+.validation-error { color: #dc2626; font-size: 0.8rem; display: block; margin-top: 0.4rem; font-weight: bold; }
+
+.alert-box { padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; text-align: center; font-size: 0.95rem; font-weight: bold; }
+.alert-box.error { background-color: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; }
+.alert-box.success { background-color: #dcfce7; color: #15803d; border: 1px solid #86efac; }
+
+.register-footer { margin-top: 2rem; text-align: center; font-size: 0.95rem; color: #64748b; }
+.register-footer a { color: #3b82f6; font-weight: bold; text-decoration: none; }
+.register-footer a:hover { text-decoration: underline; }
