@@ -250,6 +250,10 @@ ng test
 ## Pagina de jogo:
 <img width="1919" height="828" alt="image" src="https://github.com/user-attachments/assets/7cc005a2-9e00-42d8-8f99-6c1362b5e75e" />
 
+## Pagina de Ranking
+<img width="1919" height="712" alt="image" src="https://github.com/user-attachments/assets/a2527117-aa15-43f1-a4cc-d8e9343b6bfe" />
+
+
 
 
 ## 🔗 Repositório
