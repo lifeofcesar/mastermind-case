@@ -150,7 +150,7 @@ Em um **novo terminal**, acesse a pasta do frontend e instale as dependências:
 ```bash
 cd frontend
 npm install
-ng serve
+npm start
 ```
 
 > A aplicação ficará disponível em: **`http://localhost:4200`**
