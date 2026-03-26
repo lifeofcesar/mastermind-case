@@ -241,6 +241,17 @@ ng test
 
 ---
 
+## Pagina de login:
+<img width="1919" height="946" alt="image" src="https://github.com/user-attachments/assets/1c99db3f-f218-473d-a75f-c4219ce6e828" />
+
+## Dashboard Inicial:
+<img width="1919" height="1020" alt="image" src="https://github.com/user-attachments/assets/f77d6ad0-36aa-412e-8453-6c4198fbbbcc" />
+
+## Pagina de jogo:
+<img width="1919" height="828" alt="image" src="https://github.com/user-attachments/assets/7cc005a2-9e00-42d8-8f99-6c1362b5e75e" />
+
+
+
 ## 🔗 Repositório
 
 [https://github.com/lifeofcesar/mastermind-case](https://github.com/lifeofcesar/mastermind-case)
